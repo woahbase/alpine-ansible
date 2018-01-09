@@ -7,17 +7,15 @@ FROM ${USERNAME}/${DOCKERSRC}:${ARCH}
 ARG PUID=1001
 ARG PGID=1001
 #
-RUN addgroup -g ${PGID} -S alpine && \
-    adduser -u ${PUID} -G alpine -h /home/alpine -D alpine
 RUN set -xe \
-    && apk add --no-cache --purge -uU python3 python3-dev \
-    && if [[ ! -e /usr/bin/python ]];        then ln -sf /usr/bin/python3.6 /usr/bin/python; fi \
-    && if [[ ! -e /usr/bin/python-config ]]; then ln -sf /usr/bin/python3.6-config /usr/bin/python-config; fi \
-    && if [[ ! -e /usr/bin/easy_install ]];  then ln -sf /usr/bin/easy_install-3.6 /usr/bin/easy_install; fi \
-    # Install and upgrade Pip
-    && easy_install pip \
-    && pip install --upgrade pip \
-    && if [[ ! -e /usr/bin/pip ]]; then ln -sf /usr/bin/pip3.6 /usr/bin/pip; fi; \
-    rm -rf /var/cache/apk/* /tmp/*
+    && apk add --no-cache --purge -uU sudo curl ca-certificates openssh-client \
+    && apk --update add --virtual .build-dependencies python-dev libffi-dev openssl-dev build-base \
+    && pip install --no-cache --upgrade ansible \
+    && apk del --purge .build-dependencies \
+    && mkdir -p /etc/ansible \
+    && echo 'localhost' > /etc/ansible/hosts \
+    && rm -rf /var/cache/apk/* /tmp/*
 # ENTRYPOINT ["/init"]
 # ENTRYPOINT ["/usr/bin/python"]
+# ENTRYPOINT ["ansible"]
+# ENTRYPOINT ["ansible-playbook"]
