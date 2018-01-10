@@ -8,10 +8,10 @@ ARG PUID=1001
 ARG PGID=1001
 #
 RUN set -xe \
-    && apk add --no-cache --purge -uU sudo curl ca-certificates openssh-client \
-    && apk --update add --virtual .build-dependencies python-dev libffi-dev openssl-dev build-base \
-    && pip install --no-cache --upgrade ansible \
-    && apk del --purge .build-dependencies \
+    && apk add --no-cache --purge -uU sudo ansible curl ca-certificates openssh-client \
+    # && apk --update add --virtual .build-dependencies python-dev libffi-dev openssl-dev build-base \
+    # && pip install --no-cache --upgrade ansible \
+    # && apk del --purge .build-dependencies \
     && mkdir -p /etc/ansible \
     && echo 'localhost' > /etc/ansible/hosts \
     && rm -rf /var/cache/apk/* /tmp/*
