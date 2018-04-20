@@ -35,7 +35,7 @@ BUILDFLAGS := --rm --force-rm --compress -f $(CURDIR)/Dockerfile_$(ARCH) -t $(IM
 	--label org.label-schema.vcs-url="https://github.com/$(USERNAME)/$(DOCKEREPO)" \
 	--label org.label-schema.vendor=$(USERNAME)
 
-# CACHEFLAGS := --no-cache=true --pull
+CACHEFLAGS := --no-cache=true --pull
 MOUNTFLAGS := -v $(CURDIR)/data:/home/alpine --workdir /home/alpine
 NAMEFLAGS  := --name docker_$(CNTNAME) --hostname $(CNTNAME)
 OTHERFLAGS := # -v /etc/hosts:/etc/hosts:ro -v /etc/localtime:/etc/localtime:ro -e TZ=Asia/Kolkata
