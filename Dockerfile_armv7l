@@ -6,6 +6,8 @@ ARG PUID=1001
 ARG PGID=1001
 #
 RUN set -xe \
+    && addgroup -g ${PGID} -S alpine \
+    && adduser -u ${PUID} -G alpine -h /home/alpine -D alpine \
     && apk add --no-cache --purge -uU sudo ansible ansible-lint curl ca-certificates openssh-client \
     # && apk --update add --virtual .build-dependencies python3-dev libffi-dev openssl-dev build-base \
     # && pip3 install --no-cache --upgrade ansible \
@@ -13,6 +15,10 @@ RUN set -xe \
     && mkdir -p /etc/ansible \
     && echo 'localhost' > /etc/ansible/hosts \
     && rm -rf /var/cache/apk/* /tmp/*
+#
+# VOLUME /home/alpine/ # bind mount on host
+# USER alpine
+# WORKDIR /home/alpine
 # ENTRYPOINT ["/init"]
 # ENTRYPOINT ["/usr/bin/python"]
 # ENTRYPOINT ["ansible"]
