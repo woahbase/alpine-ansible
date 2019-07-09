@@ -8,15 +8,14 @@ env:
   matrix:
   - ARCH=x86_64 PUID=1000 PGID=1000
   - ARCH=armhf PUID=1001 PGID=1001
-  global:
-  - secure: G/GSqZudKnB0kKf5kKV707Jdr+ws7ckXICluLmU5EoX3jzUvUgbpAbDFqY7i54SfDWOsGPyp9wCABBu6ovIbKgq8ZI3mmpePNTq8BCn52YGHvujGSbr9eUkAj5rXV/IbCmQeGDVas/tu/7j6Me17UVEa1IStXZEgRnOnNceelljlEy7z6+J7amafHwL4iG4I92tBYPXTT9DSL2kgC6j5DfXhN3b1RtdDpdcYtezT2RA1ZxZZ3MhOsl1n2qYqWZcV26yK2Rd5I4yn9+ajIQCuJhP85z4z/hE01x2C70axQRGOJJ0DzJ6P5fqk+SBEmfuCZ1LxiB4vyoCyhQegjJoH3d0Rv6xZ/DH7IcI5Hc6/QB859bL8KVg63vAydbgeDimct3dg9vQbG8vMRx/qghhV+VySrrx7g9jjDJ+uNSffdq+H40LaVyrjRmU8n/wPG9n+7YDpCwLYkcZXfmtbbJBL6p6+nJKPxm9QJK+qthQI58Fg1JpBrdZoNtzdtNt+qWJ8GexHBjwi8wbnIBhjRD2Ac4sOeRrjTgc+95suVUjWJwfd0Q//m13SZBh1Q6/kX6TZ/AdKviyk0MUOI449LshD/kdbxCeb/mdOtHf2DL0wZqtPooGXovd12CsalEtb8a3z8eQzxN4DooflD26/PI6veSRCfzbNyDHkbzzS9K2/ziw=
-  - secure: OIl4dp57zP8wVRZC9tQRUv0L1TyJZkHvft+8s4hcm+pMVg+xSpcJqzFcqFCrC/NPRtSoRQDKmfAcMTGUKpo5XskpDQWOQyhndfuUu1giSOzJ9mihTUuF9POxftYMG0z4xFz8pl7uTwM7f/+1d5BfP9c8adCEZnZbwsEK3kkLsuZ21/56G1YXBkrMrjvPWxkwx0V6M8s2KAajrMQjSvxSaztnBbdEgmjwv91NzJygOitR4i9rBciQt/hT4glUwbGJ/X9XrEjm02o8RMyF1Y8DcpD8Z4DYyz/JLg+ez2GvoQ3IXNIu1EDO1EXnUEZU1f5rzGojKruvOP7RFdexatQR+kGdQS5JH3JJrYXa1Uppl/gFg0dzt+5itWr170uTOW49VOb+YAy0AqRs2ZeG01T3A3vZQJ54+44gFmqgCYlL2rwXEuGEpmV8U6PY2MBQBiqOPJKmqpB/IAwxlWhxHMfAMkTah7NwhLjkYQGyg/S+ozEPmDAZKFQhF1WjSN2f6M5I/jf108muZS0ywFUng5qbs+zZYtledkcv049BtQiydnnFGXeIyg19x0/8ZF/K4iBgfW9SXSK25wiUIHn+YPlMh2dCWPv62kgLr3ENN36WZiYl27jUDlC20TxgeQRCJvtNTfapCFGLqg4kdfVmOJqrIYiBl4jrnPYeCNb0J537iqI=
-install: true
+  - ARCH=armv7l  PUID=1001 PGID=1001
+  - ARCH=aarch64 PUID=1001 PGID=1001
 before_script:
+- uname -a
 - docker --version
 - make --version
 script:
-- make ARCH=${ARCH} PUID=${PUID} PGID=${PGID} build test
+- make ARCH=${ARCH} PUID=${PUID} PGID=${PGID} BUILD_NUMBER=${TRAVIS_BUILD_NUMBER} BRANCH=${TRAVIS_BRANCH} build test
 after_success:
 - docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
 - make ARCH=${ARCH} push
