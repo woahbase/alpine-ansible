@@ -4,7 +4,7 @@ ARG IMAGEBASE=frommakefile
 #
 FROM ${IMAGEBASE}
 #
-ARG MITOGEN_VERSION=0.3.13
+ARG MITOGEN_VERSION=0.3.12
 #
 ENV \
     CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
@@ -23,6 +23,7 @@ RUN set -xe \
         py3-certifi \
         py3-cffi \
         # py3-cryptography \
+        # # for xml parsing e.g. for OpenSUSE Zypper packages
         py3-lxml \
         py3-markupsafe \
         py3-pynacl \
@@ -44,6 +45,8 @@ RUN set -xe \
         wheel \
     && pip3 install --no-cache-dir --break-system-packages \
         # # needed packages
+        # # enable for python3.6 support (dropped since ansible-core==2.17)
+        ansible-core==2.16.14 \
         ansible \
         ansible-lint \
         molecule \
@@ -51,10 +54,13 @@ RUN set -xe \
         # # extra pip packages
         # ansible-cmdb \
         cryptography \
-        paramiko \
         requests \
         # # for json queries
         jmespath \
+        # ssh transport optional
+        paramiko \
+        # # python default crypt module deprecated 2.13
+        passlib \
         # for facts-cache (optional)
         redis \
 #

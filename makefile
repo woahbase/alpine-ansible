@@ -23,7 +23,9 @@ CNTNAME   := docker_$(SVCNAME)
 CNTSHELL  := /bin/bash
 
 VERSION   ?= $(call get_svc_version)
-MITVRSN   ?= $(call get_gh_version,mitogen-hq/mitogen,MITOGEN_VERSION)
+MITVRSN   ?= 0.3.18#$(call get_gh_version,mitogen-hq/mitogen,MITOGEN_VERSION)
+
+SKIP_LATESTTAG := 1
 
 TESTCMD   := \
 	uname -a; \
@@ -236,7 +238,10 @@ push : BUILDDATETAG ?= $(subst $(ARCH),$(ARCH)$(if $(VERSION),_$(VERSION),)_$(BU
 push : ## push image
 	if [ -z "$(SKIP_$(ARCH))" ]; \
 	then \
-		docker push $(IMAGETAG); \
+		if [ -z "$(SKIP_LATESTTAG)" ]; \
+		then \
+			docker push $(IMAGETAG); \
+		fi; \
 		if [ -z "$(SKIP_VERSIONTAG)" ] && [ -n "$(VERSION)" ];\
 		then \
 			echo "Tagging $(VERSIONTAG)"; \
@@ -270,8 +275,11 @@ push_registry_% : ## push image to a different registry
 		then \
 			echo "Tagging $(REGDSTTAG)"; \
 			docker tag $(IMAGETAG) $(REGDSTTAG); \
+			if [ -z "$(SKIP_LATESTTAG)" ]; \
+			then \
+				docker push $(REGDSTTAG); \
+			fi; \
 		fi; \
-		docker push $(REGDSTTAG); \
 		if [ -z "$(SKIP_VERSIONTAG)" ] && [ -n "$(VERSION)" ];\
 		then \
 			echo "Tagging $(REGDSTVERSIONTAG)"; \
