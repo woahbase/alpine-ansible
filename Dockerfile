@@ -46,7 +46,7 @@ RUN set -xe \
     && pip3 install --no-cache-dir --break-system-packages \
         # # needed packages
         # # enable for python3.6 support (dropped since ansible-core==2.17)
-        ansible-core==2.16.14 \
+        # ansible-core==2.16.14 \
         ansible \
         ansible-lint \
         molecule \

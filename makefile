@@ -23,9 +23,7 @@ CNTNAME   := docker_$(SVCNAME)
 CNTSHELL  := /bin/bash
 
 VERSION   ?= $(call get_svc_version)
-MITVRSN   ?= 0.3.18#$(call get_gh_version,mitogen-hq/mitogen,MITOGEN_VERSION)
-
-SKIP_LATESTTAG := 1
+MITVRSN   ?= $(call get_gh_version,mitogen-hq/mitogen,MITOGEN_VERSION)
 
 TESTCMD   := \
 	uname -a; \
