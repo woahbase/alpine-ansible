@@ -4,6 +4,7 @@ ARG IMAGEBASE=frommakefile
 #
 FROM ${IMAGEBASE}
 #
+ARG TARGETPLATFORM
 ARG MITOGEN_VERSION=0.3.12
 #
 ENV \
@@ -44,6 +45,12 @@ RUN set -xe \
         setuptools \
         wheel \
     && pip3 install --no-cache-dir --break-system-packages \
+        $(case ${TARGETPLATFORM} in \
+            "linux/arm64" |"linux/arm/v8" | \
+            "linux/armv7l"|"linux/arm/v7" | \
+            "linux/armhf" |"linux/arm/v6" ) \
+            echo "--extra-index-url=https://www.piwheels.org/simple";; \
+        esac) \
         # # needed packages
         # # enable for python3.6 support (dropped since ansible-core==2.17)
         # ansible-core==2.16.14 \
@@ -77,7 +84,7 @@ RUN set -xe \
 
         # # hashicorp consul, vault, and nomad
         pyhcl \
-        python-consul \
+        py-consul \
         hvac \
         python-nomad \
 #
